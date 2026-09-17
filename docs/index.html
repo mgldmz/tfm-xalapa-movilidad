@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Movilidad — Xalapa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="header-title">Análisis de Movilidad en Xalapa</h1>
+        <nav class="tabs-nav">
+            <button class="tab-btn active" data-tab="contexto">1. Contexto</button>
+            <button class="tab-btn" data-tab="diagnostico">2. Diagnóstico</button>
+            <button class="tab-btn" data-tab="propuesta">3. Propuesta</button>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="tabs-container">
+            <!-- TAB: CONTEXTO -->
+            <section class="tab-panel active" id="tab-contexto">
+                <div class="hipotesis-card">
+                    <span class="hipotesis-label">Hipótesis Principal</span>
+                    <p class="hipotesis-text">
+                        El modelo de concesiones privadas genera alta redundancia de rutas en corredores principales sin mejorar la cobertura en zonas periféricas, 
+                        creando saturación en el centro y desatención en la periferia.
+                    </p>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-card">
+                        <div class="metric-value">443k</div>
+                        <div class="metric-label">Población Xalapa</div>
+                        <div class="metric-sub">Censo INEGI 2020</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value danger">230k</div>
+                        <div class="metric-label">Vehículos registrados</div>
+                        <div class="metric-sub">Diario de Xalapa · 2026</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value accent">1 / 2.2</div>
+                        <div class="metric-label">Autos per cápita</div>
+                        <div class="metric-sub">1 auto por cada 2.2 personas</div>
+                    </div>
+                </div>
+                <div class="charts-grid">
+                    <!-- Gráfica 1 -->
+                    <div class="chart-card">
+                        <h3 class="chart-title">Modo de traslado 2014</h3>
+                        <p class="chart-sub">Encuesta OD · Ayuntamiento Xalapa 2014</p>
+                        <canvas id="chart-modal"></canvas>
+                    </div>
+
+                    <!-- Gráfica 2 -->
+                    <div class="chart-card">
+                        <h3 class="chart-title">Cambio modal 2014 vs 2024</h3>
+                        <p class="chart-sub">Encuesta OD 2014 · PMUS Xalapa 2024</p>
+                        <canvas id="chart-cambio"></canvas>
+                    </div>
+
+                    <!-- Gráfica 3 -->
+                    <div class="chart-card">
+                        <h3 class="chart-title">Crecimiento vehicular</h3>
+                        <p class="chart-sub">INEGI 2020 · Depto. Movilidad Xalapa 2024</p>
+                        <canvas id="chart-vehicular"></canvas>
+                    </div>
+
+                    <!-- Gráfica 4 -->
+                    <div class="chart-card">
+                        <h3 class="chart-title">Accidentes por corredor</h3>
+                        <p class="chart-sub">Dirección de Tránsito Municipal 2014</p>
+                        <canvas id="chart-accidentes"></canvas>
+                    </div>
+
+                    <!-- Gráfica 5 -->
+                    <div class="chart-card">
+                        <h3 class="chart-title">Hogares sin automóvil</h3>
+                        <p class="chart-sub">INEGI Censo 2020 · Xalapa</p>
+                        <canvas id="chart-hogares"></canvas>
+                    </div>
+
+                    <!-- Gráfica 6 -->
+                    <div class="chart-card" id="card-timeline">
+                        <h3 class="chart-title">Intervenciones de movilidad</h3>
+                        <p class="chart-sub">Elaboración propia · fuentes múltiples</p>
+                        <div id="chart-timeline"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB: DIAGNÓSTICO -->
+            <section class="tab-panel" id="tab-diagnostico">
+                <div class="tab-summary">
+                    El sistema presenta solapamiento extremo: 42 rutas distintas convergen en un mismo punto del centro histórico, mientras zonas periféricas habitadas tienen acceso limitado al transporte público.
+                </div>
+                <div class="tab-body">
+                    <aside class="side-menu">
+                        <span class="side-menu-label">Menú</span>
+                        <button class="side-btn active" data-map="red" data-tab-target="diagnostico">
+                            <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/>
+                            </svg>
+                            Red de rutas
+                        </button>
+                        <button class="side-btn" data-map="densidad" data-tab-target="diagnostico">
+                            <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            Densidad poblacional
+                        </button>
+                        <button class="side-btn" data-map="cobertura" data-tab-target="diagnostico">
+                            <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            Cobertura
+                        </button>
+                        <button class="side-btn" data-map="solapamiento" data-tab-target="diagnostico">
+                            <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="2" y="7" width="10" height="10" rx="2"/>
+                                <rect x="12" y="7" width="10" height="10" rx="2"/>
+                                <path d="M7 7V5a2 2 0 0 1 4 0v2M7 17v2a2 2 0 0 0 4 0v-2"/>
+                            </svg>
+                            Solapamiento
+                        </button>
+                        <button class="side-btn" data-map="clasificacion" data-tab-target="diagnostico">
+                            <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <line x1="8" y1="6" x2="21" y2="6"/>
+                                <line x1="8" y1="12" x2="21" y2="12"/>
+                                <line x1="8" y1="18" x2="21" y2="18"/>
+                                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                                <line x1="3" y1="18" x2="3.01" y2="18"/>
+                            </svg>
+                            Clasificación
+                        </button>
+                    </aside>
+                    <div class="map-container">
+                        <iframe
+                            id="main-map"
+                            src="https://mgldmz.github.io/tfm-xalapa-movilidad/mapas/mapa_red_completa.html"
+                            frameborder="0"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <aside class="metrics-panel" id="metrics-panel"></aside>
+                </div>
+            </section>
+
+            <!-- TAB: PROPUESTA -->
+            <section class="tab-panel" id="tab-propuesta">
+                <div class="tab-summary">
+                    El análisis identifica 10 nodos estratégicos de movilidad. 
+                    El Sistema Atenas atiende 4 de 5 corredores críticos identificados de forma independiente.
+                </div>
+                <div class="tab-body">
+                    <aside class="side-menu">
+                        <span class="side-menu-label">Menú</span>
+                        <button class="side-btn active" data-map="alt4" data-tab-target="propuesta">
+                            <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                            Nodos de movilidad
+                        </button>
+                        <button class="side-btn" data-map="alternativas" data-tab-target="propuesta">
+                            <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="18" cy="5" r="3"/>
+                                <circle cx="6" cy="12" r="3"/>
+                                <circle cx="18" cy="19" r="3"/>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                            </svg>
+                            4 Alternativas
+                        </button>
+                        <button class="side-btn" data-map="atenas" data-tab-target="propuesta">
+                            <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="1" y="3" width="15" height="13" rx="2"/>
+                                <path d="M16 8h4l3 3v5h-7V8z"/>
+                                <circle cx="5.5" cy="18.5" r="2.5"/>
+                                <circle cx="18.5" cy="18.5" r="2.5"/>
+                            </svg>
+                            Sistema Atenas
+                        </button>
+                        <button class="side-btn" data-map="intersecciones" data-tab-target="propuesta">
+                            <svg class="side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                            Intersecciones
+                        </button>
+                    </aside>
+                    <div class="map-container">
+                        <iframe
+                            id="propuesta-map"
+                            src="https://mgldmz.github.io/tfm-xalapa-movilidad/mapas/mapa_alt4_combinada.html"
+                            frameborder="0"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <aside class="metrics-panel" id="propuesta-metrics-panel"></aside>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <span>Universidad Complutense de Madrid</span>
+        <span>Miguel Domínguez</span>
+        <span>Trabajo Final de Máster</span>
+        <span>Septiembre 2026</span>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/charts.js"></script>
+</body>
+</html>
